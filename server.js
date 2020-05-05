@@ -1,5 +1,6 @@
 const express = require('express')
 const dotenv = require('dotenv')
+const morgan = require('morgan')
 const logger = require('./middleware/logger')
 //import env vars
 dotenv.config({path: 'config/config.env'})
@@ -11,8 +12,14 @@ const PORT = process.env.PORT || 5000
 
 const app = express()
 
+//dev logger
+if (process.env.NODE_ENV == 'development') {
+  app.use(morgan('dev'))  
+}
+
 //custom logger
 app.use(logger)
+
 
 // mounting routes
 app.use('/api/v1/bootcamps', bootcamps)
