@@ -2,8 +2,13 @@ const express = require('express')
 const dotenv = require('dotenv')
 const morgan = require('morgan')
 const logger = require('./middleware/logger')
+const connDB = require('./config/db')
+
 //import env vars
 dotenv.config({path: 'config/config.env'})
+
+//connect mongoDB
+connDB()
 
 //import routes
 const bootcamps = require('./routes/bootcamps')
@@ -25,6 +30,12 @@ app.use(logger)
 app.use('/api/v1/bootcamps', bootcamps)
 
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`application is running in ${process.env.NODE_ENV} and server is on port ${PORT}`);
 });
+
+//handle unhandled promise rejection
+process.on('unhandledRejection', (err, promise) => {
+  console.log(`error: ${err.message}`)
+  server.close(() => process.exit(1))
+})
