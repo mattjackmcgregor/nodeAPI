@@ -3,10 +3,18 @@ const Bootcamp = require('../models/bootcamp')
 // @desc      get all bootcamps
 // @route     api/v1/bootcamps
 // @access    Public
-exports.getAllBootcamps = (req, res, next) => {  
-  res.json({
-    msg: 'get all bootcamps'
-  })
+exports.getAllBootcamps = async (req, res, next) => {  
+  try {
+    const bootcamp = await Bootcamp.find()
+    res
+    .status(200)
+    .json({
+      sucess: true,
+      data: bootcamp
+    })
+  } catch (error) {
+    res.json(400)
+  }
 }
 // @desc      get single bootcamp
 // @route     api/v1/bootcamps/:id
