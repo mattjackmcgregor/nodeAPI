@@ -13,16 +13,37 @@ exports.getAllBootcamps = async (req, res, next) => {
       data: bootcamp
     })
   } catch (error) {
-    res.json(400)
+    res.json(400).json({
+      sucess: false,
+      msg: error
+    })
   }
 }
 // @desc      get single bootcamp
 // @route     api/v1/bootcamps/:id
 // @access    Public
-exports.getBootcamp = (req, res, next) => {  
-  res.json({
-    msg: `get bootcamp ${req.params.id}`
-  })
+exports.getBootcamp = async(req, res, next) => {  
+  try {
+    const bootcamp = await Bootcamp.findById(req.params.id)
+
+    //MUST RETURN else error about set headers will show
+    if(!bootcamp) {
+      return res.status(400).json({
+        sucess: false,
+        msg: 'bootcamp with this id doesnt exits'
+      })
+    }
+
+    res.status(200).json({
+      sucess: true,
+      data: bootcamp
+    })
+  } catch (error) {
+    res.status(400).json({
+      sucess: false,
+      msg: error
+    })
+  }
 }
 // @desc      create bootcamp
 // @route     api/v1/bootcamps
@@ -41,7 +62,10 @@ exports.postBootcamp = async (req, res, next) => {
     
   } catch (error) {
     console.log(error)
-    res.json(error)
+    res.json({
+      sucess: false,
+      msg: error
+    })
   }
   
 }
