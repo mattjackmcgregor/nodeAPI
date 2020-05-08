@@ -10,6 +10,7 @@ exports.getAllBootcamps = async (req, res, next) => {
     .status(200)
     .json({
       sucess: true,
+      count: bootcamp.length,
       data: bootcamp
     })
   } catch (error) {
@@ -36,6 +37,7 @@ exports.getBootcamp = async(req, res, next) => {
 
     res.status(200).json({
       sucess: true,
+      msg: 'fetched bootcamp sucessfully',
       data: bootcamp
     })
   } catch (error) {
@@ -56,7 +58,8 @@ exports.postBootcamp = async (req, res, next) => {
       .status(201)
       .json({
         sucess: true,
-        msg: `created bootcamp`
+        msg: `created bootcamp`,
+        data: bootcamp
       })
       console.log('bootcamp created')
     
@@ -87,6 +90,7 @@ exports.updateBootcamp = async (req, res, next) => {
     
     res.status(200).json({
       sucess: true,
+      msg: 'bootcamp updated',
       data: bootcamp
     })
   } catch (error) {
@@ -99,8 +103,25 @@ exports.updateBootcamp = async (req, res, next) => {
 // @desc      delete bootcamp
 // @route     api/v1/bootcamps/:id
 // @access    Private
-exports.deleteBootcamp = (req, res, next) => {  
-  res.json({
-    msg: `delete bootcamp ${req.params.id}`
-  })
+exports.deleteBootcamp = async (req, res, next) => {  
+  try {
+    const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id)
+
+    if (!bootcamp) {
+      return res.status(400).json({
+        sucess: false,
+        msg: 'bootcamp with this id doesnt exits'
+       })
+    }
+    res.status(200).json({
+      sucess: true,
+      msg: 'bootcamp sucessfully deleted',
+      data: {}
+    })
+  } catch (error) {
+     res.status(400).json({
+       sucess: false,
+       msg: error
+     })
+  }
 }
