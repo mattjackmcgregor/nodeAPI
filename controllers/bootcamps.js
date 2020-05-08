@@ -61,8 +61,7 @@ exports.postBootcamp = async (req, res, next) => {
       console.log('bootcamp created')
     
   } catch (error) {
-    console.log(error)
-    res.json({
+    res.status(400).json({
       sucess: false,
       msg: error
     })
@@ -72,10 +71,30 @@ exports.postBootcamp = async (req, res, next) => {
 // @desc      update bootcamp
 // @route     api/v1/bootcamps/:id
 // @access    Private
-exports.updateBootcamp = (req, res, next) => {  
-  res.json({
-    msg: `update bootcamp ${req.params.id}`
-  })
+exports.updateBootcamp = async (req, res, next) => {  
+  try {
+    const bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true
+    })
+
+    if (!bootcamp) {
+      return res.status(400).json({
+        sucess: false,
+        msg: 'bootcamp with this id doesnt exits'
+      })
+    }
+    
+    res.status(200).json({
+      sucess: true,
+      data: bootcamp
+    })
+  } catch (error) {
+    res.status(400).json({
+      sucess: false,
+      msg: error
+    })
+  }
 }
 // @desc      delete bootcamp
 // @route     api/v1/bootcamps/:id
