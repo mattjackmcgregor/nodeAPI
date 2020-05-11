@@ -1,4 +1,5 @@
 const Bootcamp = require('../models/bootcamp')
+const ErrorResponse = require('../utils/errorResponse')
 
 // @desc      get all bootcamps
 // @route     api/v1/bootcamps
@@ -29,10 +30,11 @@ exports.getBootcamp = async(req, res, next) => {
 
     //MUST RETURN else error about set headers will show
     if(!bootcamp) {
-      return res.status(400).json({
-        sucess: false,
-        msg: 'bootcamp with this id doesnt exits'
-      })
+      return next(new ErrorResponse('bootcamp with this id doesnt exits', 404))
+      // return res.status(400).json({
+      //   sucess: false,
+      //   msg: 'bootcamp with this id doesnt exits'
+      // })
     }
 
     res.status(200).json({
@@ -41,7 +43,7 @@ exports.getBootcamp = async(req, res, next) => {
       data: bootcamp
     })
   } catch (error) {
-    next(error)
+    next(new ErrorResponse('bootcamp with this id doesnt exits', 404))
     // res.status(400).json({
     //   sucess: false,
     //   msg: error
