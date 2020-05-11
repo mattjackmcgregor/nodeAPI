@@ -2,6 +2,8 @@ const express = require('express')
 const dotenv = require('dotenv')
 const morgan = require('morgan')
 const colors = require('colors')
+
+const errorHandler = require('./middleware/errorHandling')
 const logger = require('./middleware/logger')
 const connDB = require('./config/db')
 
@@ -15,24 +17,29 @@ connDB()
 //import routes
 const bootcamps = require('./routes/bootcamps')
 
+//setting port
 const PORT = process.env.PORT || 5000
+
 
 const app = express()
 
 //body parser
 app.use(express.json())
 
+// mounting routes
+app.use('/api/v1/bootcamps', bootcamps)
+
 //dev logger
 if (process.env.NODE_ENV == 'development') {
   app.use(morgan('dev'))  
 }
 
-//custom logger
+//custom middleware
 app.use(logger)
+app.use(errorHandler)
 
 
-// mounting routes
-app.use('/api/v1/bootcamps', bootcamps)
+
 
 
 const server = app.listen(PORT, () => {
