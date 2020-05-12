@@ -15,12 +15,10 @@ exports.getAllBootcamps = async (req, res, next) => {
       data: bootcamp
     })
   } catch (error) {
-    res.json(400).json({
-      sucess: false,
-      msg: error
-    })
+    next(error)
   }
 }
+
 // @desc      get single bootcamp
 // @route     api/v1/bootcamps/:id
 // @access    Public
@@ -36,20 +34,20 @@ exports.getBootcamp = async(req, res, next) => {
       //   msg: 'bootcamp with this id doesnt exits'
       // })
     }
-
     res.status(200).json({
       sucess: true,
       msg: 'fetched bootcamp sucessfully',
       data: bootcamp
     })
   } catch (error) {
-    next(new ErrorResponse('bootcamp with this id doesnt exits', 404))
+    next(error)
     // res.status(400).json({
     //   sucess: false,
     //   msg: error
     // })
   }
 }
+
 // @desc      create bootcamp
 // @route     api/v1/bootcamps
 // @access    Private
@@ -67,10 +65,7 @@ exports.postBootcamp = async (req, res, next) => {
       console.log('bootcamp created')
     
   } catch (error) {
-    res.status(400).json({
-      sucess: false,
-      msg: error
-    })
+    next(error)
   }
   
 }
@@ -85,10 +80,7 @@ exports.updateBootcamp = async (req, res, next) => {
     })
 
     if (!bootcamp) {
-      return res.status(400).json({
-        sucess: false,
-        msg: 'bootcamp with this id doesnt exits'
-      })
+      return next(new ErrorResponse('bootcamp with this id doesnt exits', 404))
     }
     
     res.status(200).json({
@@ -97,12 +89,10 @@ exports.updateBootcamp = async (req, res, next) => {
       data: bootcamp
     })
   } catch (error) {
-    res.status(400).json({
-      sucess: false,
-      msg: error
-    })
+   next(error)
   }
 }
+
 // @desc      delete bootcamp
 // @route     api/v1/bootcamps/:id
 // @access    Private
@@ -111,10 +101,7 @@ exports.deleteBootcamp = async (req, res, next) => {
     const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id)
 
     if (!bootcamp) {
-      return res.status(400).json({
-        sucess: false,
-        msg: 'bootcamp with this id doesnt exits'
-       })
+       return next(new ErrorResponse('bootcamp with this id doesnt exits', 404))
     }
     res.status(200).json({
       sucess: true,
@@ -122,9 +109,6 @@ exports.deleteBootcamp = async (req, res, next) => {
       data: {}
     })
   } catch (error) {
-     res.status(400).json({
-       sucess: false,
-       msg: error
-     })
+     next(error)
   }
 }
