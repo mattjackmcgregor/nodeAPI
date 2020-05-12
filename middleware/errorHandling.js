@@ -5,8 +5,8 @@ const errorHandler = (err, req, res, next) => {
 
   error.message = err.message
   //logging to console for dev
-  console.log(err)
-  console.log(err.name)
+  console.log(error)
+  
 
   //Mongoose bad ObjectId
   if(err.name === 'CastError'){
@@ -20,7 +20,11 @@ const errorHandler = (err, req, res, next) => {
     error = new ErrorResponse(message, 400)
   }
 
-  //
+  //Mongoose field requirment validation
+  if (err.name === 'ValidatonError') {
+      const message = Object.values(err.errors).map(val => val.name)
+      error = new ErrorResponse(message, 400)
+  }
 
   res.status(error.statusCode || 500).json({
     success: false,

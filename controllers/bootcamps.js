@@ -1,11 +1,12 @@
 const Bootcamp = require('../models/bootcamp')
 const ErrorResponse = require('../utils/errorResponse')
+const asyncHandler = require('../middleware/async')
 
 // @desc      get all bootcamps
 // @route     api/v1/bootcamps
 // @access    Public
-exports.getAllBootcamps = async (req, res, next) => {  
-  try {
+exports.getAllBootcamps = asyncHandler (async (req, res, next) => {  
+ 
     const bootcamp = await Bootcamp.find()
     res
     .status(200)
@@ -14,16 +15,13 @@ exports.getAllBootcamps = async (req, res, next) => {
       count: bootcamp.length,
       data: bootcamp
     })
-  } catch (error) {
-    next(error)
-  }
-}
+})
 
 // @desc      get single bootcamp
 // @route     api/v1/bootcamps/:id
 // @access    Public
-exports.getBootcamp = async(req, res, next) => {  
-  try {
+exports.getBootcamp = asyncHandler (async (req, res, next) => {
+  
     const bootcamp = await Bootcamp.findById(req.params.id)
 
     //MUST RETURN else error about set headers will show
@@ -39,20 +37,19 @@ exports.getBootcamp = async(req, res, next) => {
       msg: 'fetched bootcamp sucessfully',
       data: bootcamp
     })
-  } catch (error) {
-    next(error)
-    // res.status(400).json({
-    //   sucess: false,
-    //   msg: error
-    // })
-  }
-}
+  // } catch (error) {
+  //   next(error)
+  //   // res.status(400).json({
+  //   //   sucess: false,
+  //   //   msg: error
+  //   // })
+  // }
+})
 
 // @desc      create bootcamp
 // @route     api/v1/bootcamps
 // @access    Private
-exports.postBootcamp = async (req, res, next) => {  
-  try {
+exports.postBootcamp = asyncHandler (async (req, res, next) => {
     const bootcamp = await Bootcamp.create(req.body)
     // console.log(req.body)
     res
@@ -63,17 +60,11 @@ exports.postBootcamp = async (req, res, next) => {
         data: bootcamp
       })
       console.log('bootcamp created')
-    
-  } catch (error) {
-    next(error)
-  }
-  
-}
+})
 // @desc      update bootcamp
 // @route     api/v1/bootcamps/:id
 // @access    Private
-exports.updateBootcamp = async (req, res, next) => {  
-  try {
+exports.updateBootcamp = asyncHandler (async (req, res, next) => {
     const bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true
@@ -88,16 +79,12 @@ exports.updateBootcamp = async (req, res, next) => {
       msg: 'bootcamp updated',
       data: bootcamp
     })
-  } catch (error) {
-   next(error)
-  }
-}
+})
 
 // @desc      delete bootcamp
 // @route     api/v1/bootcamps/:id
 // @access    Private
-exports.deleteBootcamp = async (req, res, next) => {  
-  try {
+exports.deleteBootcamp = asyncHandler (async (req, res, next) => {
     const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id)
 
     if (!bootcamp) {
@@ -108,7 +95,4 @@ exports.deleteBootcamp = async (req, res, next) => {
       msg: 'bootcamp sucessfully deleted',
       data: {}
     })
-  } catch (error) {
-     next(error)
-  }
-}
+})
