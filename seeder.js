@@ -18,6 +18,7 @@ mongoose.connect(process.env.MONGO_URI, {
 //read JSON files
 const bootcamps = JSON.parse(fs.readFileSync(`${__dirname}/_data/bootcamps.json`, 'utf-8'))
 
+//run in terminal: node seeder.js -i
 const importData = async () => {
   try {
     await Bootcamp.create(bootcamps)
@@ -28,6 +29,7 @@ const importData = async () => {
   }
 }
 
+//run in terminal: node seeder.js -d
 const deleteData = async () => {
   try {
     await Bootcamp.deleteMany()
