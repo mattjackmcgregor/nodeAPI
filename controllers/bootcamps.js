@@ -103,21 +103,17 @@ exports.deleteBootcamp = asyncHandler (async (req, res, next) => {
 // @access    Private
 exports.getBootcampsInRadius = asyncHandler(async (req, res, next) => {
   const {zipcode, distance} = req.params
-  
+
   //get lat and long
   const loc = await geocoder.geocode(zipcode)
   const lat = loc[0].latitude
   const lng = loc[0].longitude
 
+  //calc radius using radians distance / radius of earth in Kilometers
+  const radius = distance / 6371
   //find bootcamps within radius
   const bootcamps = await Bootcamp.find({
-    loc: {
-      $geoWithin: {
-        $centerSphere: [
-          [lng, lat], distance / 6371
-        ]
-      }
-    }
+    location: { $geoWithin: { $centerSphere: [ [lng, lat], radius ]}}
   })
   res.status(200).json({
     sucess: true,
