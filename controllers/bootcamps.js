@@ -7,22 +7,32 @@ const geocoder = require('../utils/geocoder')
 // @route     api/v1/bootcamps
 // @access    Public
 exports.getAllBootcamps = asyncHandler (async (req, res, next) => {  
- 
-    const bootcamp = await Bootcamp.find()
-    res
-    .status(200)
-    .json({
-      sucess: true,
-      count: bootcamp.length,
-      data: bootcamp
-    })
+  console.log(req.query)
+  let query
+  //query object to string
+  let queryStr = JSON.stringify(req.query)
+  //create mongodb query operators
+  queryStr = queryStr.replace(/\b(eq|gt|gte|in|lt|lte|ne|nin)\b/g, match => `$${match}`)
+  console.log(queryStr)
+  //finding query results
+  query = Bootcamp.find(JSON.parse(queryStr))
+  //executing query
+  const bootcamp = await query
+
+  res
+  .status(200)
+  .json({
+    sucess: true,
+    count: bootcamp.length,
+    data: bootcamp
+  })
 })
 
 // @desc      get single bootcamp
 // @route     api/v1/bootcamps/:id
 // @access    Public
 exports.getBootcamp = asyncHandler (async (req, res, next) => {
-  
+
     const bootcamp = await Bootcamp.findById(req.params.id)
 
     //MUST RETURN else error about set headers will show
@@ -103,12 +113,10 @@ exports.deleteBootcamp = asyncHandler (async (req, res, next) => {
 // @access    Private
 exports.getBootcampsInRadius = asyncHandler(async (req, res, next) => {
   const {zipcode, distance} = req.params
-
   //get lat and long
   const loc = await geocoder.geocode(zipcode)
   const lat = loc[0].latitude
   const lng = loc[0].longitude
-
   //calc radius using radians distance / radius of earth in Kilometers
   const radius = distance / 6371
   //find bootcamps within radius
