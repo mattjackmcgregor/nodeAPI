@@ -9,13 +9,31 @@ const geocoder = require('../utils/geocoder')
 exports.getAllBootcamps = asyncHandler (async (req, res, next) => {  
   console.log(req.query)
   let query
+  //copy of req query
+  const reqQuery = {...req.query}
+
+  //feilds to exclude from query
+  const removeFeilds = ['select']
+
+  //loop over and delete from query
+  removeFeilds.forEach(feild => delete reqQuery[feild])
+
   //query object to string
-  let queryStr = JSON.stringify(req.query)
+  let queryStr = JSON.stringify(reqQuery)
+ 
+
   //create mongodb query operators
   queryStr = queryStr.replace(/\b(eq|gt|gte|in|lt|lte|ne|nin)\b/g, match => `$${match}`)
   console.log(queryStr)
   //finding query results
   query = Bootcamp.find(JSON.parse(queryStr))
+
+  if (req.query.select) {
+    let feilds = req.query.select.split(',').join(' ')
+    console.group(feilds)
+    query = query.select(feilds)
+    
+  }
   //executing query
   const bootcamp = await query
 
