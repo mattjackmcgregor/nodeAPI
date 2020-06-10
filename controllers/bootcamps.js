@@ -13,7 +13,7 @@ exports.getAllBootcamps = asyncHandler (async (req, res, next) => {
   const reqQuery = {...req.query}
 
   //feilds to exclude from query
-  const removeFeilds = ['select', 'sort']
+  const removeFeilds = ['select', 'sort', 'page', 'limit']
 
   //loop over and delete from query
   removeFeilds.forEach(feild => delete reqQuery[feild])
@@ -33,6 +33,7 @@ exports.getAllBootcamps = asyncHandler (async (req, res, next) => {
     let feilds = req.query.select.split(',').join(' ')
     query = query.select(feilds)
   }
+
   //sort query check
   if (req.query.sort) {
     let sortBy = req.query.sort.split(',').join(' ')
@@ -40,6 +41,13 @@ exports.getAllBootcamps = asyncHandler (async (req, res, next) => {
   } else {
     query.sort('createdAt')
   }
+
+  //pagination
+  const page = parseInt(req.query.page, 10) || 1
+  const limit = parseInt(req.query.limit, 10) || 10
+  //skip specifies numer of docs to skip to return the ones you are trying to recieve
+  const skip = (page - 1) * limit
+  query = query.skip(skip).limit(limit)
   //executing query
   const bootcamp = await query
 
