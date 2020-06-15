@@ -6,9 +6,10 @@ const colors = require('colors')
 // load env vars 
 dotenv.config({path: './config/config.env'})
 
-//load bootcamp models
-const Bootcamp = require('./models/bootcamp')
-
+//load Bootcamp models
+const Bootcamp = require('./models/Bootcamp')
+//load Course models
+const Course = require('./models/Course')
 //connect to DB
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
@@ -17,11 +18,13 @@ mongoose.connect(process.env.MONGO_URI, {
 
 //read JSON files
 const bootcamps = JSON.parse(fs.readFileSync(`${__dirname}/_data/bootcamps.json`, 'utf-8'))
+const courses = JSON.parse(fs.readFileSync(`${__dirname}/_data/courses.json`, 'utf-8'))
 
 //run in terminal: node seeder.js -i
 const importData = async () => {
   try {
     await Bootcamp.create(bootcamps)
+    await Course.create(courses)
     console.log('data imported'.green.inverse)
     process.exit()
   } catch (error) {
@@ -33,6 +36,7 @@ const importData = async () => {
 const deleteData = async () => {
   try {
     await Bootcamp.deleteMany()
+    await Course.deleteMany()
     console.log('data deleted'.red.inverse)
     process.exit()
   } catch (error) {
