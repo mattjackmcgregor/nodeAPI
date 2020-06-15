@@ -16,6 +16,7 @@ connDB()
 
 //import routes
 const bootcamps = require('./routes/bootcamps')
+const courses = require('./routes/courses')
 
 //setting port
 const PORT = process.env.PORT || 5000
@@ -28,6 +29,7 @@ app.use(express.json())
 
 // mounting routes
 app.use('/api/v1/bootcamps', bootcamps)
+app.use('/api/v1/courses', courses)
 
 //dev logger
 if (process.env.NODE_ENV == 'development') {
