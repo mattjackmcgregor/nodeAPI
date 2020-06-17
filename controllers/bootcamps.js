@@ -11,13 +11,10 @@ exports.getAllBootcamps = asyncHandler (async (req, res, next) => {
   let query
   //copy of req query
   const reqQuery = {...req.query}
-
   //feilds to exclude from query
   const removeFeilds = ['select', 'sort', 'page', 'limit']
-
   //loop over and delete from query
   removeFeilds.forEach(feild => delete reqQuery[feild])
-
   //query object to string
   let queryStr = JSON.stringify(reqQuery)
  

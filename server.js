@@ -41,9 +41,6 @@ app.use(logger)
 app.use(errorHandler)
 
 
-
-
-
 const server = app.listen(PORT, () => {
   console.log(`application is running in ${process.env.NODE_ENV} and server is on port ${PORT}`.yellow);
 });
