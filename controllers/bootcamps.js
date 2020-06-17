@@ -22,8 +22,9 @@ exports.getAllBootcamps = asyncHandler (async (req, res, next) => {
   //create mongodb query operators
   queryStr = queryStr.replace(/\b(eq|gt|gte|in|lt|lte|ne|nin)\b/g, match => `$${match}`)
   console.log(queryStr)
+
   //finding query results
-  query = Bootcamp.find(JSON.parse(queryStr))
+  query = Bootcamp.find(JSON.parse(queryStr)).populate('courses')
 
   //select query check
   if (req.query.select) {
@@ -41,7 +42,7 @@ exports.getAllBootcamps = asyncHandler (async (req, res, next) => {
 
   //pagination
   const page = parseInt(req.query.page, 10) || 1
-  const limit = parseInt(req.query.limit, 10) || 1
+  const limit = parseInt(req.query.limit, 10) || 10
   //startIndex specifies numer of docs to skip to return the ones you are trying to recieve
   const startIndex = (page - 1) * limit
   const endIndex = page * limit
