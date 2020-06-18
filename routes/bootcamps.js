@@ -5,7 +5,8 @@ const {
   postBootcamp,
   updateBootcamp,
   deleteBootcamp,
-  getBootcampsInRadius
+  getBootcampsInRadius,
+  uploadBootcampPhoto
 } = require('../controllers/bootcamps')
 
 //bringing in other routes for redirect
@@ -16,6 +17,8 @@ const router = express.Router()
 //redirecting to appropriate routes
 router.use('/:bootcampId/courses', courseRoutes)
 
+router.route('/:id/photo')
+  .put(uploadBootcampPhoto)
 
 router.route('/radius/:zipcode/:distance')
   .get(getBootcampsInRadius)

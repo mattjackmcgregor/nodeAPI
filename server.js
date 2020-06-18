@@ -1,7 +1,9 @@
+const Path = require('path')
 const express = require('express')
 const dotenv = require('dotenv')
 const morgan = require('morgan')
 const colors = require('colors')
+const fileUpload = require('express-fileupload')
 
 const errorHandler = require('./middleware/errorHandling')
 const logger = require('./middleware/logger')
@@ -24,8 +26,21 @@ const PORT = process.env.PORT || 5000
 
 const app = express()
 
+app.use(express.static(Path.join(__dirname, 'public')))
+
 //body parser
 app.use(express.json())
+// app.use(express.json({
+//   limit: '50mb'
+// }));
+// app.use(express.urlencoded({
+//   limit: '50mb',
+//   extended: true
+// }));
+
+
+//express file uploader middleware
+app.use(fileUpload())
 
 // mounting routes
 app.use('/api/v1/bootcamps', bootcamps)
@@ -39,6 +54,7 @@ if (process.env.NODE_ENV == 'development') {
 //custom middleware
 app.use(logger)
 app.use(errorHandler)
+
 
 
 const server = app.listen(PORT, () => {
