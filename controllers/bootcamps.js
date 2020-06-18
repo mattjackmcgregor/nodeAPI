@@ -85,7 +85,7 @@ exports.getAllBootcamps = asyncHandler (async (req, res, next) => {
 // @access    Public
 exports.getBootcamp = asyncHandler (async (req, res, next) => {
 
-    const bootcamp = await Bootcamp.findById(req.params.id)
+    const bootcamp = await Bootcamp.findById(req.params.id).populate('courses')
 
     //MUST RETURN else error about set headers will show
     if(!bootcamp) {
