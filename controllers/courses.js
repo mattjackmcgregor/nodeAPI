@@ -83,9 +83,26 @@ exports.updateCourse = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('course with this id doesnt exits', 404))
   }
 
-  res.status(201).json({
+  res.status(200).json({
     sucess: true,
-    msg: 'course created',
+    msg: 'course updated',
+    data: course
+  })
+})
+
+// @desc      delete course
+// @route     api/v1//courses/:id
+// @access    Private
+exports.deleteCourse = asyncHandler(async (req, res, next) => {
+  const course = await Course.findByIdAndDelete(req.params.id)
+
+  if (!course) {
+    return next(new ErrorResponse('course with this id doesnt exits', 404))
+  }
+
+  res.status(200).json({
+    sucess: true,
+    msg: 'course deleted',
     data: course
   })
 })
