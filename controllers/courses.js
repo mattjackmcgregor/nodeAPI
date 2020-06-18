@@ -6,7 +6,7 @@ const asyncHandler = require('../middleware/async')
 
 // @desc      get all courses
 // @route     api/v1/courses
-// @route     api/v1/bootcamps/:bootcampId/courses
+// @route     GET api/v1/bootcamps/:bootcampId/courses
 // @access    Public
 exports.getCourses = asyncHandler(async (req, res, next) => {
   let query
@@ -30,7 +30,7 @@ exports.getCourses = asyncHandler(async (req, res, next) => {
 })
 
 // @desc      get single course
-// @route     api/v1/courses/:id
+// @route     GET api/v1/courses/:id
 // @access    Public
 exports.getCourse = asyncHandler(async (req, res, next) => {
   const course = await Course.findById(req.params.id).populate({
@@ -49,7 +49,7 @@ exports.getCourse = asyncHandler(async (req, res, next) => {
 })
 
 // @desc      create course
-// @route     api/v1/bootcamps/:bootcampId/courses
+// @route     CREATE api/v1/bootcamps/:bootcampId/courses
 // @access    Private
 exports.createCourse = asyncHandler(async (req, res, next) => {
   //getting bootcamp that the course is for
@@ -71,7 +71,7 @@ exports.createCourse = asyncHandler(async (req, res, next) => {
 })
 
 // @desc      update course
-// @route     api/v1//courses/:id
+// @route     PUT api/v1//courses/:id
 // @access    Private
 exports.updateCourse = asyncHandler(async (req, res, next) => {
   const course = await Course.findByIdAndUpdate(req.params.id, req.body, {
@@ -91,7 +91,7 @@ exports.updateCourse = asyncHandler(async (req, res, next) => {
 })
 
 // @desc      delete course
-// @route     api/v1//courses/:id
+// @route     DELETE api/v1//courses/:id
 // @access    Private
 exports.deleteCourse = asyncHandler(async (req, res, next) => {
   const course = await Course.findByIdAndDelete(req.params.id)

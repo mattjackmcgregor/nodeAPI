@@ -4,7 +4,7 @@ const asyncHandler = require('../middleware/async')
 const geocoder = require('../utils/geocoder')
 
 // @desc      get all bootcamps
-// @route     api/v1/bootcamps
+// @route     GET api/v1/bootcamps
 // @access    Public
 exports.getAllBootcamps = asyncHandler (async (req, res, next) => {  
   console.log(req.query)
@@ -19,7 +19,7 @@ exports.getAllBootcamps = asyncHandler (async (req, res, next) => {
   let queryStr = JSON.stringify(reqQuery)
  
 
-  //create mongodb query operators
+  //create mongodb query operators 
   queryStr = queryStr.replace(/\b(eq|gt|gte|in|lt|lte|ne|nin)\b/g, match => `$${match}`)
   console.log(queryStr)
 
@@ -81,7 +81,7 @@ exports.getAllBootcamps = asyncHandler (async (req, res, next) => {
 })
 
 // @desc      get single bootcamp
-// @route     api/v1/bootcamps/:id
+// @route     GET api/v1/bootcamps/:id
 // @access    Public
 exports.getBootcamp = asyncHandler (async (req, res, next) => {
 
@@ -110,7 +110,7 @@ exports.getBootcamp = asyncHandler (async (req, res, next) => {
 })
 
 // @desc      create bootcamp
-// @route     api/v1/bootcamps
+// @route     CREATE api/v1/bootcamps
 // @access    Private
 exports.postBootcamp = asyncHandler (async (req, res, next) => {
     const bootcamp = await Bootcamp.create(req.body)
@@ -125,7 +125,7 @@ exports.postBootcamp = asyncHandler (async (req, res, next) => {
       console.log('bootcamp created')
 })
 // @desc      update bootcamp
-// @route     api/v1/bootcamps/:id
+// @route     PUT api/v1/bootcamps/:id
 // @access    Private
 exports.updateBootcamp = asyncHandler (async (req, res, next) => {
     const bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
@@ -145,7 +145,7 @@ exports.updateBootcamp = asyncHandler (async (req, res, next) => {
 })
 
 // @desc      delete bootcamp
-// @route     api/v1/bootcamps/:id
+// @route     DELETE api/v1/bootcamps/:id
 // @access    Private
 exports.deleteBootcamp = asyncHandler (async (req, res, next) => {
     const bootcamp = await Bootcamp.findById(req.params.id)
@@ -155,7 +155,7 @@ exports.deleteBootcamp = asyncHandler (async (req, res, next) => {
     }
 
     bootcamp.remove()
-    
+
     res.status(200).json({
       sucess: true,
       msg: 'bootcamp sucessfully deleted',
@@ -165,7 +165,7 @@ exports.deleteBootcamp = asyncHandler (async (req, res, next) => {
 
 // @desc      get bootcamps within radius
 // @route     api/v1/bootcamps/radius/:zipcode/:distance
-// @access    Private
+// @access    Public
 exports.getBootcampsInRadius = asyncHandler(async (req, res, next) => {
   const {zipcode, distance} = req.params
   //get lat and long
