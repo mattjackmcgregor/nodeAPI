@@ -9,6 +9,12 @@ const {
   uploadBootcampPhoto
 } = require('../controllers/bootcamps')
 
+//advanced middleware
+const advancedResults = require('../middleware/advancedResults')
+
+//bring in bootcamps model
+const Bootcamp = require('../models/Bootcamp')
+
 //bringing in other routes for redirect
 const courseRoutes = require('./courses')
 
@@ -24,7 +30,7 @@ router.route('/radius/:zipcode/:distance')
   .get(getBootcampsInRadius)
 
 router.route('/')
-.get(getAllBootcamps)
+.get(advancedResults(Bootcamp, 'courses'), getAllBootcamps)
 .post(postBootcamp)
 
 router.route('/:id')
