@@ -10,9 +10,9 @@ const asyncHandler = require('../middleware/async')
 // @access    Public
 exports.getCourses = asyncHandler(async (req, res, next) => {
   if(req.params.bootcampId) {
-    const course = Course.find({bootcamp: req.params.bootcampId})
+    const course = await Course.find({bootcamp: req.params.bootcampId})
     res.status(200).json({
-      sucess: true,
+      success: true,
       count: course.length,
       data: course
     })
@@ -26,8 +26,8 @@ exports.getCourses = asyncHandler(async (req, res, next) => {
 // @access    Public
 exports.getCourse = asyncHandler(async (req, res, next) => {
   const course = await Course.findById(req.params.id).populate({
-    path: 'bootcmap',
-    select: 'name description'
+    path: 'bootcamp',
+    select: 'name description' 
   })
 
   if(!course) {
@@ -35,7 +35,7 @@ exports.getCourse = asyncHandler(async (req, res, next) => {
   }
 
   res.status(200).json({
-    sucess: true,
+    success: true,
     data: course
   })
 })
@@ -56,7 +56,7 @@ exports.createCourse = asyncHandler(async (req, res, next) => {
   const course = await Course.create(req.body)
 
   res.status(201).json({
-    sucess: true,
+    success: true,
     msg: 'course created',
     data: course
   })
@@ -76,7 +76,7 @@ exports.updateCourse = asyncHandler(async (req, res, next) => {
   }
 
   res.status(200).json({
-    sucess: true,
+    success: true,
     msg: 'course updated',
     data: course
   })
@@ -93,7 +93,7 @@ exports.deleteCourse = asyncHandler(async (req, res, next) => {
   }
   await course.remove()
   res.status(200).json({
-    sucess: true,
+    success: true,
     msg: 'course deleted',
     data: course
   })

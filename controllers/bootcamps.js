@@ -29,7 +29,7 @@ exports.getBootcamp = asyncHandler (async (req, res, next) => {
       // })
     }
     res.status(200).json({
-      sucess: true,
+      success: true,
       msg: 'fetched bootcamp sucessfully',
       data: bootcamp
     })
@@ -51,7 +51,7 @@ exports.postBootcamp = asyncHandler (async (req, res, next) => {
     res
       .status(201)
       .json({
-        sucess: true,
+        success: true,
         msg: `created bootcamp`,
         data: bootcamp
       })
@@ -71,7 +71,7 @@ exports.updateBootcamp = asyncHandler (async (req, res, next) => {
     }
     
     res.status(200).json({
-      sucess: true,
+      success: true,
       msg: 'bootcamp updated',
       data: bootcamp
     })
@@ -90,7 +90,7 @@ exports.deleteBootcamp = asyncHandler (async (req, res, next) => {
     bootcamp.remove()
 
     res.status(200).json({
-      sucess: true,
+      success: true,
       msg: 'bootcamp sucessfully deleted',
       data: {}
     })
@@ -112,7 +112,7 @@ exports.getBootcampsInRadius = asyncHandler(async (req, res, next) => {
     location: { $geoWithin: { $centerSphere: [ [lng, lat], radius ]}}
   })
   res.status(200).json({
-    sucess: true,
+    success: true,
     count: bootcamps.length,
     data: bootcamps
   })
@@ -155,7 +155,7 @@ exports.uploadBootcampPhoto = asyncHandler(async (req, res, next) => {
      photo: file.name
    })
     res.status(200).json({
-      sucess: true,
+      success: true,
       msg: 'bootcamp photo sucessfuly uploaded',
       data: file.name
     })

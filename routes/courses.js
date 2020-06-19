@@ -18,7 +18,7 @@ const router = express.Router({mergeParams: true})
 router.route('/')
   .get(
     advancedResults(Course, {
-    path: 'bootcmap',
+    path: 'bootcamp',
     select: 'name description'
     }),
     getCourses
