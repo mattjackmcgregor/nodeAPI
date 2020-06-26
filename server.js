@@ -4,7 +4,7 @@ const dotenv = require('dotenv')
 const morgan = require('morgan')
 const colors = require('colors')
 const fileUpload = require('express-fileupload')
-
+const cookieParser = require('cookie-parser')
 const errorHandler = require('./middleware/errorHandling')
 const logger = require('./middleware/logger')
 const connDB = require('./config/db')
@@ -39,6 +39,8 @@ app.use(express.json())
 //   extended: true
 // }));
 
+//cookie parser
+app.use(cookieParser())
 
 //express file uploader middleware
 app.use(fileUpload())
