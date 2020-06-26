@@ -79,3 +79,15 @@ const sendTokenResponse = (user, statusCode, res) => {
       token
     })
 }
+
+// @desc      get user
+// @route     GET api/v1/auth/lme
+// @access    Private
+exports.getMe = asyncHandler( async (req, res, next) => {
+  const user = await User.findById(req.user.id)
+
+  res.status(200).json({
+    sucess: true,
+    data: user
+  })
+})
