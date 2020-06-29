@@ -80,7 +80,7 @@ exports.updateCourse = asyncHandler(async (req, res, next) => {
   }
 
   if (course.user.toString() !== req.user.id && req.user.role !=='admin') {
-    return next(new ErrorResponse(`publisher with id ${req.user.id} is not authorized to update a this course with id ${course.id}`))
+    return next(new ErrorResponse(`publisher with id ${req.user.id} is not authorized to update a this course with id ${course.id}`, 401))
   }
   course = await Course.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
@@ -105,7 +105,7 @@ exports.deleteCourse = asyncHandler(async (req, res, next) => {
   }
   //owner permission
   if (course.user.toString() !== req.user.id && req.user.role !== 'admin') {
-    return next(new ErrorResponse(`publisher with id ${req.user.id} is not authorized to delete this course with id ${course.id}`))
+    return next(new ErrorResponse(`publisher with id ${req.user.id} is not authorized to delete this course with id ${course.id}`, 401))
   }
 
   await course.remove()
