@@ -52,6 +52,7 @@ exports.postBootcamp = asyncHandler (async (req, res, next) => {
   //check if published bootcmp
   const publishedBootcamp = await Bootcamp.findOne({user: req.user.id})
 
+  //checking ownership
   if(publishedBootcamp && req.user.role !=='admin') {
     return next(new ErrorResponse(`publisher with id ${req.user.id} has already published a bootcamp`, 400))
   }
