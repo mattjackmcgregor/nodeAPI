@@ -103,6 +103,11 @@ exports.deleteCourse = asyncHandler(async (req, res, next) => {
   if (!course) {
     return next(new ErrorResponse('course with this id doesnt exits', 404))
   }
+  //owner permission
+  if (course.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(new ErrorResponse(`publisher with id ${req.user.id} is not authorized to delete this course with id ${course.id}`))
+  }
+
   await course.remove()
   res.status(200).json({
     success: true,
