@@ -9,9 +9,6 @@ const {
   uploadBootcampPhoto
 } = require('../controllers/bootcamps')
 
-//advanced middleware
-const advancedResults = require('../middleware/advancedResults')
-
 //bring in bootcamps model
 const Bootcamp = require('../models/Bootcamp')
 
@@ -20,6 +17,8 @@ const courseRoutes = require('./courses')
 
 //auth middleware
 const {protect, authorize} = require('../middleware/auth')
+//advanced middleware
+const advancedResults = require('../middleware/advancedResults')
 
 const router = express.Router()
 

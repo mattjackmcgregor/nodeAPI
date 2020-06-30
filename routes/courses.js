@@ -12,7 +12,6 @@ const Course = require('../models/Course')
 
 //advanceResults middleware
 const advancedResults = require('../middleware/advancedResults')
-
 //auth middleware
 const {protect, authorize} = require('../middleware/auth')
 
