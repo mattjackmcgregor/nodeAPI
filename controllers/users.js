@@ -54,7 +54,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
   }
 
   if (req.user.role !== 'admin') {
-    return next(new ErrorResponse(`publisher with id ${req.user.id} is not authorized to create a user`, 401))
+    return next(new ErrorResponse(`publisher with id ${req.user.id} is not authorized to update this user`, 401))
   }
 
   user = await User.findByIdAndUpdate(req.params.id, req.body, {
@@ -70,27 +70,24 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
 })
 
 // @desc      delete user
-// @route     PUT api/v1/auth/users/:id
+// @route     DELETE api/v1/auth/users/:id
 // @access    Private
-exports.updateUser = asyncHandler(async (req, res, next) => {
-  let user = await User.findById(req.params.id)
+exports.deleteUser = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.id)
 
   if (!user) {
     return next(new ErrorResponse(`user with id of ${req.params.id} doesnt exist `))
   }
 
   if (req.user.role !== 'admin') {
-    return next(new ErrorResponse(`publisher with id ${req.user.id} is not authorized to create a user`, 401))
+    return next(new ErrorResponse(`publisher with id ${req.user.id} is not authorized to delete this user`, 401))
   }
 
-  user = await User.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true
-  })
+  await user.remove()
 
   res.status(200).json({
     sucess: true,
-    message: 'updated user successfully',
+    message: 'removed user successfully',
     data: user
   })
 })
