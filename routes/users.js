@@ -2,7 +2,8 @@ const express = require('express')
 const {
   getAllUsers,
   getUser,
-  createUser
+  createUser,
+  updateUser
  
 } = require('../controllers/users')
 
@@ -22,8 +23,9 @@ router.route('/')
   .get(advancedResults(User), getAllUsers)
   .post(createUser)
 
-  
+
 router.route('/:id')
   .get(getUser)
+  .put(updateUser)
 
 module.exports = router
