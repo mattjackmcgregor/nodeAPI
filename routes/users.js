@@ -1,7 +1,8 @@
 const express = require('express')
 const {
   getAllUsers,
-  getUser
+  getUser,
+  createUser
  
 } = require('../controllers/users')
 
@@ -19,7 +20,9 @@ router.use(authorize('admin'))
 
 router.route('/')
   .get(advancedResults(User), getAllUsers)
+  .post(createUser)
 
+  
 router.route('/:id')
   .get(getUser)
 
