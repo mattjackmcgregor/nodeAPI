@@ -37,7 +37,11 @@ createdAt: {
 })
 
 //password encryption
-UserSchema.pre('save', async function() {
+UserSchema.pre('save', async function(next) {
+
+  if (!this.isModified('password')) {
+    next()
+  }
   const salt = await bcrypt.genSalt(10)
   this.password = await bcrypt.hash(this.password, salt)
 })
@@ -60,6 +64,8 @@ UserSchema.methods.getResetToken = function() {
   const resetToken = crypto.randomBytes(20).toString('hex')
   //hash token and set to resetPasswordToken feild in user
   this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex')
+  //token expire date 
+  this.resetPasswordExpire = Date.now() + 10 * 60 * 1000
 
   return resetToken
 }

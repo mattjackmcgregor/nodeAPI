@@ -83,7 +83,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   const resetToken = user.getResetToken()
 
   //sending normal version in email
-  console.log(resetToken)
+  await user.save({validateBeforeSave: false})
 
 
   res.status(200).json({
