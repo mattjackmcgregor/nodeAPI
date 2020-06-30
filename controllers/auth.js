@@ -56,30 +56,6 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
 })
 
 
-//get token from model, create cookie and send response
-const sendTokenResponse = (user, statusCode, res) => {
-   const token = user.getSignedJwtToken()
-    //setting cookie expiry 30 days from now time
-   const options = {
-     expires: new Date(
-       Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
-     ),
-     httpOnly: true
-   }
-   if(process.env.NODE_ENV === 'production'){
-     options.secure = true
-   }
-   
-
-   res
-    .status(statusCode)
-    .cookie('TOKEN', token, options)
-    .json({
-      sucess: true,
-      token
-    })
-}
-
 // @desc      get user
 // @route     GET api/v1/auth/lme
 // @access    Private
@@ -91,3 +67,52 @@ exports.getMe = asyncHandler( async (req, res, next) => {
     data: user
   })
 })
+
+// @desc      forgot password
+// @route     post api/v1/auth/forgotpassword
+// @access    Public
+exports.forgotPassword = asyncHandler(async (req, res, next) => {
+
+  const user = await User.findOne({email: req.body.email})
+
+  if(!user){
+    return next(new ErrorResponse('user with that email doesnt exist', 404))
+  }
+
+  //get resetToken and store hash version in db (function in User schema methods)
+  const resetToken = user.getResetToken()
+
+  //sending normal version in email
+  console.log(resetToken)
+
+
+  res.status(200).json({
+    sucess: true,
+    data: user
+  })
+})
+
+
+//get token from model, create cookie and send response
+const sendTokenResponse = (user, statusCode, res) => {
+  const token = user.getSignedJwtToken()
+  //setting cookie expiry 30 days from now time
+  const options = {
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
+    ),
+    httpOnly: true
+  }
+  if (process.env.NODE_ENV === 'production') {
+    options.secure = true
+  }
+
+
+  res
+    .status(statusCode)
+    .cookie('TOKEN', token, options)
+    .json({
+      sucess: true,
+      token
+    })
+}
