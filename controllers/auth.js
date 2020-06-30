@@ -3,6 +3,7 @@ const User = require('../models/User')
 const ErrorResponse = require('../utils/errorResponse')
 const asyncHandler = require('../middleware/async')
 const sendEmail = require('../utils/sendEmail')
+const crypto = require('crypto')
 
 // @desc      Register user
 // @route     POST api/v1/auth/register
@@ -87,7 +88,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   await user.save({validateBeforeSave: false})
 
   //create reset url
-  const resetUrl = `${req.protocol}://${req.host}/api/v1/resetpassword/${resetToken}`
+  const resetUrl = `${req.protocol}://${req.host}/api/v1/auth/resetpassword/${resetToken}`
   //email message
   const message = `You are recieving the email because you (or someone else) requested to reset a password. please make a PUT request to: \n\n ${resetUrl} `
 
@@ -112,7 +113,33 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 
     return next(new ErrorResponse('email could not be sent', 500))
   }
+})
 
+// @desc      reset password
+// @route     GET api/v1/auth/resetpassword/:resettoken
+// @access    Private
+exports.resetPassword = asyncHandler(async (req, res, next) => {
+  
+  //getting the hashed token
+  const resetPasswordToken = crypto.createHash('sha256').update(req.params.resettoken).digest('hex')
+  //find user with token and check reset token hasnt expired
+  const user = await User.findOne({
+    resetPasswordToken,
+    resetPasswordExpire: {$gt: Date.now()}
+  })
+
+  if(!user) {
+    return next(new ErrorResponse('invalid token', 400))
+  }
+  //set new password user sent in body 
+  user.password = req.body.password
+  user.resetPasswordToken = undefined
+  user.resetPasswordExpire = undefined
+
+  await user.save()
+
+  //sending new signed in JWT token 
+  sendTokenResponse(user, 200, res)
   
 })
 
