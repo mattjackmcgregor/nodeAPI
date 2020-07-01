@@ -1,6 +1,7 @@
 const express = require('express')
 const {
-  getReviews
+  getReviews,
+  getReview
 } = require('../controllers/reviews')
 
 //bring in Reviews model
@@ -26,6 +27,8 @@ router.route('/')
     }),
     getReviews
   )
+router.route('/:id')
+    .get(getReview)
 
 
 
