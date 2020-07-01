@@ -2,7 +2,7 @@ const express = require('express')
 const {
   getReviews,
   getReview,
-  CreateReview
+  createReview
 } = require('../controllers/reviews')
 
 //bring in Reviews model
@@ -27,9 +27,9 @@ router.route('/')
       select: 'name description'
     }),
     getReviews
-  ).post(protect, authorize('user', 'admin'), CreateReview)
+  ).post(protect, authorize('user', 'admin'), createReview)
 
-  
+
 router.route('/:id')
     .get(getReview)
 

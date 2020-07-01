@@ -44,8 +44,7 @@ exports.getReview = asyncHandler(async (req, res, next) => {
 // @desc      create review
 // @route     POST api/v1/bootcamps/:bootcampId/reviews
 // @access    Private
-
-exports.CreateReview = asyncHandler(async (req, res, next) => {
+exports.createReview = asyncHandler(async (req, res, next) => {
   //setting bootcampId and user to request body
   req.body.bootcamp = req.params.bootcampId
   req.body.user = req.user.id
@@ -64,6 +63,35 @@ exports.CreateReview = asyncHandler(async (req, res, next) => {
 
   //creating review
   const review = await Reviews.create(req.body)
+
+  res.status(201).json({
+    sucess: true,
+    message: 'review submittle sucessfully',
+    data: review
+  })
+})
+
+// @desc      Update review
+// @route     PUT api/v1/reviews/:id
+// @access    Private
+exports.updateReview = asyncHandler(async (req, res, next) => {
+  
+  let review = await Review.findById(req.params.id)
+
+  //checking if review exist
+  if (!review) {
+    return next(new ErrorResponse(`bootcamp with id ${req.params.id} doesn't exist`, 404))
+  }
+
+  //checking if user role
+  if (review.user.toString() !== req.user.id && req.user.role !== 'user') {
+    return next(new ErrorResponse(`user with id of ${req.user.id} is not authorized to update review with id of ${req.params.id}`, 401))
+  }
+
+  review = await Review.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true
+  })
 
   res.status(201).json({
     sucess: true,
