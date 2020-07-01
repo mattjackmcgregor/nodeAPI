@@ -14,6 +14,7 @@ const Bootcamp = require('../models/Bootcamp')
 
 //bringing in other routes for redirect
 const courseRoutes = require('./courses')
+const reviewsRoutes = require('./reviews')
 
 //auth middleware
 const {protect, authorize} = require('../middleware/auth')
@@ -24,6 +25,7 @@ const router = express.Router()
 
 //redirecting to appropriate routes
 router.use('/:bootcampId/courses', courseRoutes)
+router.use('/:bootcampId/reviews', reviewsRoutes)
 
 router.route('/:id/photo')
   .put(protect, authorize('publisher', 'admin'), uploadBootcampPhoto)
