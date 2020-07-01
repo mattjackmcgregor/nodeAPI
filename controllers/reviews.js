@@ -29,7 +29,7 @@ exports.getReviews = asyncHandler(async (req, res, next) => {
 exports.getReview = asyncHandler(async (req, res, next) => {
   const review = await Reviews.findById(req.params.id).populate({
     path: 'bootcamp',
-    select: 'name, description'
+    select: 'name description'
   })
 
   if(!review) {
