@@ -2,7 +2,8 @@ const express = require('express')
 const {
   getReviews,
   getReview,
-  createReview
+  createReview,
+  updateReview
 } = require('../controllers/reviews')
 
 //bring in Reviews model
@@ -32,6 +33,7 @@ router.route('/')
 
 router.route('/:id')
     .get(getReview)
+    .put(protect, authorize('user', 'admin'), updateReview)
 
 
 
