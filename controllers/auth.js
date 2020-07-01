@@ -58,10 +58,27 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
 })
 
 
-// @desc      get user
-// @route     GET api/v1/auth/lme
+// @desc      logout
+// @route     GET api/v1/auth/logout
 // @access    Private
-exports.getMe = asyncHandler( async (req, res, next) => {
+exports.logout = asyncHandler( async (req, res, next) => {
+  
+  res.cookie('token', 'none', {
+    expires: new Date(Date.now() + 1 * 1000),
+    httpOnly: true
+  })
+
+  res.status(200).json({
+    sucess: true,
+    message: 'loggedout',
+    data: {}
+  })
+})
+
+// @desc      get user
+// @route     GET api/v1/auth/me
+// @access    Private
+exports.getMe = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id)
 
   res.status(200).json({
@@ -199,10 +216,9 @@ const sendTokenResponse = (user, statusCode, res) => {
     options.secure = true
   }
 
-
   res
     .status(statusCode)
-    .cookie('TOKEN', token, options)
+    .cookie('token', token, options)
     .json({
       sucess: true,
       token
