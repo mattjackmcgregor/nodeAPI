@@ -65,7 +65,7 @@ exports.CreateReview = asyncHandler(async (req, res, next) => {
   //creating review
   const review = await Reviews.create(req.body)
 
-  res.status(200).json({
+  res.status(201).json({
     sucess: true,
     message: 'review submittle sucessfully',
     data: review

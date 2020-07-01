@@ -27,8 +27,9 @@ router.route('/')
       select: 'name description'
     }),
     getReviews
-  )
-  .post(protect, authorize('user'), CreateReview)
+  ).post(protect, authorize('user', 'admin'), CreateReview)
+
+  
 router.route('/:id')
     .get(getReview)
 
