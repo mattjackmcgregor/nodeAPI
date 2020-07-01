@@ -3,7 +3,8 @@ const {
   getReviews,
   getReview,
   createReview,
-  updateReview
+  updateReview,
+  deleteReview
 } = require('../controllers/reviews')
 
 //bring in Reviews model
@@ -34,7 +35,7 @@ router.route('/')
 router.route('/:id')
     .get(getReview)
     .put(protect, authorize('user', 'admin'), updateReview)
-
+    .delete(protect, authorize('user', 'admin'), deleteReview)
 
 
 
