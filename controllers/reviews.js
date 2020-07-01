@@ -66,7 +66,7 @@ exports.createReview = asyncHandler(async (req, res, next) => {
 
   res.status(201).json({
     sucess: true,
-    message: 'review submittle sucessfully',
+    message: 'created review sucessfully',
     data: review
   })
 })
@@ -76,7 +76,7 @@ exports.createReview = asyncHandler(async (req, res, next) => {
 // @access    Private
 exports.updateReview = asyncHandler(async (req, res, next) => {
   
-  let review = await Review.findById(req.params.id)
+  let review = await Reviews.findById(req.params.id)
 
   //checking if review exist
   if (!review) {
@@ -88,15 +88,40 @@ exports.updateReview = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(`user with id of ${req.user.id} is not authorized to update review with id of ${req.params.id}`, 401))
   }
 
-  review = await Review.findByIdAndUpdate(req.params.id, req.body, {
+  review = await Reviews.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true
   })
 
   res.status(201).json({
     sucess: true,
-    message: 'review submittle sucessfully',
+    message: 'updated review sucessfully',
     data: review
   })
+})
 
+// @desc      Delete review
+// @route     DELETE api/v1/reviews/:id
+// @access    Private
+exports.deleteReview = asyncHandler(async (req, res, next) => {
+
+  const review = await Reviews.findById(req.params.id)
+
+  //checking if review exist
+  if (!review) {
+    return next(new ErrorResponse(`bootcamp with id ${req.params.id} doesn't exist`, 404))
+  }
+
+  //checking if authorized
+  if (review.user.toString() !== req.user.id && req.user.role !== 'user') {
+    return next(new ErrorResponse(`user with id of ${req.user.id} is not authorized to update review with id of ${req.params.id}`, 401))
+  }
+
+  await review.remove()
+
+  res.status(201).json({
+    sucess: true,
+    message: 'removed review sucessfully',
+    data: review
+  })
 })
