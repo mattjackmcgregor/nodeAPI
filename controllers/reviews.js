@@ -40,3 +40,35 @@ exports.getReview = asyncHandler(async (req, res, next) => {
     data: review
   })
 })
+
+// @desc      create review
+// @route     POST api/v1/bootcamps/:bootcampId/reviews
+// @access    Private
+
+exports.CreateReview = asyncHandler(async (req, res, next) => {
+  //setting bootcampId and user to request body
+  req.body.bootcamp = req.params.bootcampId
+  req.body.user = req.user.id
+
+  const bootcamp = await Bootcamp.findById(req.params.bootcampId)
+
+  //checking if bootcamp exist
+  if(!bootcamp) {
+    return next(new ErrorResponse(`bootcamp with id ${req.params.bootcampId} doesn't exist`, 404))
+  }
+
+  //checking if user role
+  if(req.user.id !=='user') {
+    return next(new ErrorResponse(`We support honest reviews. Only users can leave reviews for bootcamps.`, 401))
+  }
+
+  //creating review
+  const review = await Reviews.create(req.body)
+
+  res.status(200).json({
+    sucess: true,
+    message: 'review submittle sucessfully',
+    data: review
+  })
+
+})
