@@ -9,7 +9,8 @@ const errorHandler = require('./middleware/errorHandling')
 const logger = require('./middleware/logger')
 const connDB = require('./config/db')
 const mongoSanitize = require('express-mongo-sanitize')
-
+const helmet = require('helmet')
+const xss = require('xss-clean')
 
 //import env vars
 dotenv.config({path: 'config/config.env'})
@@ -51,6 +52,12 @@ app.use(fileUpload())
 
 //sanitize data
 app.use(mongoSanitize())
+
+//security headers protection
+app.use(helmet())
+
+//xss protection
+app.use(xss())
 
 // mounting routes
 app.use('/api/v1/bootcamps', bootcamps)
