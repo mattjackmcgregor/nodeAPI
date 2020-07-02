@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser')
 const errorHandler = require('./middleware/errorHandling')
 const logger = require('./middleware/logger')
 const connDB = require('./config/db')
+const mongoSanitize = require('express-mongo-sanitize')
 
 
 //import env vars
@@ -47,6 +48,9 @@ app.use(cookieParser())
 
 //express file uploader middleware
 app.use(fileUpload())
+
+//sanitize data
+app.use(mongoSanitize())
 
 // mounting routes
 app.use('/api/v1/bootcamps', bootcamps)
