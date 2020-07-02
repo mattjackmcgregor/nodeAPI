@@ -57,7 +57,7 @@ exports.createReview = asyncHandler(async (req, res, next) => {
   }
 
   //checking if user role
-  if(req.user.role !=='user') {
+  if (req.user.role !== 'user' && req.user.role !== 'admin') {
     return next(new ErrorResponse(`We support honest reviews. Only users can leave reviews for bootcamps.`, 401))
   }
 
