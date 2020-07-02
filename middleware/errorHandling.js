@@ -10,7 +10,7 @@ const errorHandler = (err, req, res, next) => {
 
   //Mongoose bad ObjectId
   if(err.name === 'CastError'){
-    const message = `Resourse with id ${err.value} doesnt exits`
+    const message = `Resourse doesnt exits`
     error = new ErrorResponse(message, 404)
   }
 
