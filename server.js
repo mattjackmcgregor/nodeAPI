@@ -11,6 +11,9 @@ const connDB = require('./config/db')
 const mongoSanitize = require('express-mongo-sanitize')
 const helmet = require('helmet')
 const xss = require('xss-clean')
+const rateLimit = require('express-rate-limit')
+const hpp = require('hpp')
+const cors = require('cors')
 
 //import env vars
 dotenv.config({path: 'config/config.env'})
@@ -58,6 +61,19 @@ app.use(helmet())
 
 //xss protection
 app.use(xss())
+
+//rate limiting
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+})
+app.use(limiter)
+
+//hpp params polution
+app.use(hpp())
+
+//enable CORS
+app.use(cors())
 
 // mounting routes
 app.use('/api/v1/bootcamps', bootcamps)
